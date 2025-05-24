@@ -1,5 +1,5 @@
 
-# 🌾 Sistema de Irrigação Inteligente - Gestão Agrícola
+# 🌾 Farmtech RS - Gestão Agrícola
 
 Este projeto foi desenvolvido como parte das atividades práticas das fases do primeiro ano do curso de IA da FIAP. O objetivo é simular um sistema de gestão agrícola inteligente com funcionalidades de monitoramento climático, controle de irrigação, análise de dados e visão computacional para auxílio na tomada de decisões no campo.
 
