@@ -1,0 +1,1 @@
+from fase_1 import executar_fase_1

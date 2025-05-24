@@ -1,0 +1,191 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+getwd()
+```
+
+Instalar e carregar os pacotes necessários
+
+```{r}
+install.packages("dplyr")
+install.packages("readxl")
+library(dplyr)
+library(readxl)
+```
+
+Importar o xlsx que é exportado pela aplicação Python, arquivo fica no diretório: /farmtech/ProjectR. 
+Gera o dataframe com os dados da cultura Uva.
+
+```{r}
+dados_uva <- read_excel("Uva_dados_culturas_20240916_105604.xlsx", sheet = 1)
+```
+
+Lógica para aplicação de análise estatísitca:
+
+Se numero_linhas_uva == 0, exibe uma mensagem indicando que não há dados para "Uva".
+Se numero_linhas_uva = 1, calcula a média de consumo dos insumos em relação a área plantada. 
+Se numero_linhas_uva > 1, calculá a média de utilização dos insumos e faz analise de desvio padrão do consumo dos insumos.
+
+```{r}
+dados_uva$Mancozebe <- as.numeric(as.character(dados_uva$Mancozebe))
+dados_uva$`Sulfato de cobre` <- as.numeric(as.character(dados_uva$`Sulfato de cobre`))
+dados_uva$Água <- as.numeric(as.character(dados_uva$Água))
+dados_uva$Área <- as.numeric(as.character(dados_uva$Área))
+
+# Número de linhas da cultura Uva
+numero_linhas_uva <- nrow(dados_uva)
+
+if (numero_linhas_uva == 0) {
+  # Nenhum dado encontrado para a cultura "Uva"
+  cat("Nenhuma linha encontrada para a cultura 'Uva'. Não é possível realizar análise estatística.\n")
+} else if (numero_linhas_uva == 1) {
+  # Cálculo da média por área plantada quando há somente uma linha
+  media_mancozebe_area <- dados_uva$Mancozebe / dados_uva$Área
+  media_sulfato_area <- dados_uva$`Sulfato de cobre` / dados_uva$Área
+  media_agua_area <- dados_uva$Água / dados_uva$Área
+  
+  # Exibir as médias por área
+  cat("Média do consumo de Mancozebe por área plantada:", format(media_mancozebe_area, nsmall = 4), "(kg/m²)\n")
+  cat("Média do consumo de Sulfato de cobre por área plantada:", format(media_sulfato_area, nsmall = 4), "(kg/m²)\n")
+  cat("Média do consumo de Água por área plantada:", format(media_agua_area, nsmall = 4), "(Litros/m²)\n")
+  
+} else {
+  # Cálculo das médias gerais dos insumos quando há mais de uma linha
+  media_agua <- mean(dados_uva$Água, na.rm = TRUE)
+  media_mancozebe <- mean(dados_uva$Mancozebe, na.rm = TRUE)
+  media_sulfato_de_cobre <- mean(dados_uva$`Sulfato de cobre`, na.rm = TRUE)
+  
+  # Exibir as médias no formato desejado
+  cat("Média do consumo de Água:", format(media_agua, nsmall = 1), "(Litros/m²)\n")
+  cat("Média do consumo de Mancozebe:", format(media_mancozebe, nsmall = 1), "(kg/m²)\n")
+  cat("Média do consumo de Sulfato de cobre:", format(media_sulfato_de_cobre, nsmall = 1), "(kg/m²)\n")
+  
+  # Calcular e exibir o desvio padrão somente se houver mais de uma linha
+  desvio_padrao_agua <- sd(dados_uva$Água, na.rm = TRUE)
+  desvio_padrao_mancozebe <- sd(dados_uva$Mancozebe, na.rm = TRUE)
+  desvio_padrao_sulfato_de_cobre <- sd(dados_uva$`Sulfato de cobre`, na.rm = TRUE)
+  
+  # Exibir os desvios padrões
+  cat("\nDesvio padrão do consumo de Água:", format(desvio_padrao_agua, nsmall = 1), "(Litros/m²)\n")
+  cat("Desvio padrão do consumo de Mancozebe:", format(desvio_padrao_mancozebe, nsmall = 1), "(kg/m²)\n")
+  cat("Desvio padrão do consumo de Sulfato de cobre:", format(desvio_padrao_sulfato_de_cobre, nsmall = 1), "(kg/m²)\n")
+}
+
+```
+
+Importar o xlsx exportado pela aplicação Python que fica no diretório: /farmtech/ProjectR.
+Gera o dataframe com os dados da cultura Soja.
+
+```{r}
+dados_soja <- read_excel("Soja_dados_culturas_20240916_105909.xlsx", sheet = 1)
+```
+
+Se numero_linhas_soja == 0, exibe uma mensagem indicando que não há dados para "Soja".
+Se numero_linhas_soja = 1, calcula e exibe a média de consumo dos insumos em relação a área plantada.
+Se numero_linhas_soja > 1, calculá a média de utilização dos insumos e faz análise de desvio padrão do consumo dos insumos.
+
+```{r}
+dados_soja$Sementes <- as.numeric(as.character(dados_soja$Sementes))
+dados_soja$Adubo <- as.numeric(as.character(dados_soja$Adubo))
+dados_soja$Área <- as.numeric(as.character(dados_soja$Área))
+
+# Número de linhas da cultura Soja
+numero_linhas_soja <- nrow(dados_soja)
+
+if (numero_linhas_soja == 0) {
+  # Nenhum dado encontrado para a cultura "Soja"
+  cat("Nenhuma linha encontrada para a cultura 'Soja'. Não é possível realizar análise estatística.\n")
+} else if (numero_linhas_soja == 1) {
+  # Cálculo da média por área plantada quando há somente uma linha
+  media_sementes_area <- dados_soja$Sementes / dados_soja$Área
+  media_adubo_area <- dados_soja$Adubo / dados_soja$Área
+  
+  # Exibir as médias por área
+  cat("Média do consumo de Sementes por área plantada:", format(media_sementes_area, nsmall = 1), "(unidades/m²)\n")
+  cat("Média do consumo de Adubo por área plantada:", format(media_adubo_area, nsmall = 1), "(kg/m²)\n")
+  
+} else {
+  # Cálculo das médias gerais dos insumos quando há mais de uma linha
+  media_sementes <- mean(dados_soja$Sementes, na.rm = TRUE)
+  media_adubo <- mean(dados_soja$Adubo, na.rm = TRUE)
+  
+  # Exibir as médias
+  cat("Média do consumo de Sementes:", format(media_sementes, nsmall = 1), "(unidades/m²)\n")
+  cat("Média do consumo de Adubo:", format(media_adubo, nsmall = 1), "(kg/m²)\n")
+  
+  # Calcular e exibir o desvio padrão dos insumos
+  desvio_padrao_sementes <- sd(dados_soja$Sementes, na.rm = TRUE)
+  desvio_padrao_adubo <- sd(dados_soja$Adubo, na.rm = TRUE)
+  
+  # Exibir os desvios padrões
+  cat("\nDesvio padrão do consumo de Sementes:", format(desvio_padrao_sementes, nsmall = 1), "(unidades/m²)\n")
+  cat("Desvio padrão do consumo de Adubo:", format(desvio_padrao_adubo, nsmall = 1), "(kg/m²)\n")
+}
+
+```
+Informações Climáticas:
+
+```{r}
+library(httr)
+library(jsonlite)
+library(lubridate)
+
+# Substitua pela sua chave da API
+api_key <- "b1c10b127a61f43e535e53092bc892ef"
+
+# Defina a cidade e país
+cidade <- "Bento Goncalves,BR"
+
+# Construa a URL da API
+url <- paste0("https://api.openweathermap.org/data/2.5/weather?q=", 
+              URLencode(cidade), 
+              "&appid=", api_key, 
+              "&units=metric&lang=pt_br")
+
+# Faça a requisição e converta o resultado para JSON
+resposta <- GET(url)
+dados <- fromJSON(content(resposta, "text", encoding = "UTF-8"))
+
+# Função para calcular o indicador de possibilidade de chuva
+calcular_indicador_chuva <- function(umidade, descricao) {
+  indicador <- 0
+  indicador <- indicador + ifelse(umidade >= 80, 6, ifelse(umidade >= 70, 4, ifelse(umidade >= 60, 2, 0)))
+  indicador <- indicador + ifelse(descricao %in% c("chuva leve", "chuva moderada", "chuva forte"), 3, ifelse(descricao %in% c("nuvens dispersas", "nuvens baixas", "nuvens altas"), 2, 0))
+  min(indicador, 10)
+}
+
+# Verifique e processe os dados
+if (status_code(resposta) == 200) {
+  # Acesse os dados
+  temperatura <- dados$main$temp
+  sensacao_termica <- dados$main$feels_like
+  temp_min <- dados$main$temp_min
+  temp_max <- dados$main$temp_max
+  pressao <- dados$main$pressure
+  umidade <- dados$main$humidity
+  descricao <- dados$weather$description
+  data_hora_brasilia <- with_tz(as.POSIXct(dados$dt, origin = "1970-01-01", tz = "UTC"), tzone = "America/Sao_Paulo")
+  
+  # Calcular o indicador de possibilidade de chuva
+  indicador_chuva <- calcular_indicador_chuva(umidade, descricao)
+  
+  # Exibição dos dados
+  cat("Previsão Atual para", dados$name, "no Brasil:\n")
+  cat("Data e Hora:", format(data_hora_brasilia, "%Y-%m-%d %H:%M:%S"), "\n")
+  cat("Temperatura:", temperatura, "°C\n")
+  cat("Sensação Térmica:", sensacao_termica, "°C\n")
+  cat("Temperatura Mínima:", temp_min, "°C\n")
+  cat("Temperatura Máxima:", temp_max, "°C\n")
+  cat("Pressão:", pressao, "hPa\n")
+  cat("Umidade:", umidade, "%\n")
+  cat("Descrição:", descricao, "\n")
+  cat("Indicador de Possibilidade de Chuva ao longo do dia (0 a 10):", indicador_chuva, "\n")
+} else {
+  cat("Erro na consulta:", status_code(resposta), "\n")
+}
+```
+
+

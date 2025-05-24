@@ -1,0 +1,14 @@
+pandas
+streamlit
+oracledb
+SQLAlchemy
+requests
+matplotlib
+scikit-learn
+numpy
+openpyxl
+seaborn
+torch
+opencv-python
+Pillow
+ultralytics
